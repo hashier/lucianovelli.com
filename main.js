@@ -117,48 +117,6 @@
     });
   });
 
-  /* ── Contact form AJAX ── */
-  var form = document.querySelector('.contact-form');
-  if (form) {
-    var lang = document.documentElement.lang || 'en';
-    var t = {
-      sending: lang === 'it' ? 'Invio in corso…' : 'Sending…',
-      success: lang === 'it'
-        ? 'Messaggio inviato! Ti risponderemo presto.'
-        : "Message sent! We'll be in touch shortly.",
-      error: lang === 'it'
-        ? 'Qualcosa è andato storto. Scrivici direttamente: info@lucianovelli.com'
-        : 'Something went wrong. Please email us: info@lucianovelli.com'
-    };
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var submitBtn = form.querySelector('[type="submit"]');
-      var orig = submitBtn.textContent;
-      submitBtn.textContent = t.sending;
-      submitBtn.disabled = true;
-      fetch(form.action, { method: 'POST', body: new FormData(form) })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (!data.success) throw new Error(data.error || '');
-          var msg = document.createElement('p');
-          msg.className = 'form-success';
-          msg.textContent = t.success;
-          form.replaceWith(msg);
-        })
-        .catch(function () {
-          var err = form.querySelector('.form-error');
-          if (!err) {
-            err = document.createElement('p');
-            err.className = 'form-error';
-            form.appendChild(err);
-          }
-          err.textContent = t.error;
-          submitBtn.textContent = orig;
-          submitBtn.disabled = false;
-        });
-    });
-  }
-
   /* ── Lightbox ── */
   var galleryItems = document.querySelectorAll('.gallery-item, .art-card, .exhibitions-grid picture');
   if (galleryItems.length) {
